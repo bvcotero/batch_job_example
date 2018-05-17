@@ -17,6 +17,8 @@ variable "events"            { }
 
 variable "role"              { }
 
+variable "tags"              { type = "map" }
+
 
 # Creates lambda function with a zip file containing code  
 
@@ -26,7 +28,7 @@ resource "aws_lambda_function" "lambda" {
     role             = "${var.role}"
     handler          = "${var.handler}"
     runtime          = "${var.runtime}"
-
+    tags             = "${var.tags}"
     source_code_hash = "${base64sha256(file("${var.zip_file}"))}"
 }
 

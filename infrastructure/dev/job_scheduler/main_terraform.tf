@@ -46,6 +46,7 @@ module "lambda_function" {
   role          = "${module.iam_lambda.execution_role_arn}"
   handler       = "main.entrypoint"
   runtime       = "python2.7"
+  tags          = "${module.tags.tags_merged}"
 
   source_arn    = "${data.aws_s3_bucket.snapshots.arn}"
   source_id     = "${data.aws_s3_bucket.snapshots.id}"

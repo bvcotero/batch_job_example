@@ -15,7 +15,7 @@ resource "aws_batch_compute_environment" "batch_service" {
     ]
     subnets  = ["${data.aws_subnet_ids.private.ids}"]
     type     = "EC2"
-    image_id = "ami-40ddb938"
+    image_id = "${data.aws_ami.amazon-ecs.id}"
     tags    = "${module.tags.tags_merged}"
   }
 

@@ -17,3 +17,15 @@ variable "lambda_execution_policy_tmpl" { }
 variable "lambda_batch_policy_tmpl"     { }
 variable "lambda_function_zip_file"     { }
 
+variable "default_tags" {
+  type = "map"
+
+  default = {
+    "Name"                = "batch_service"
+    "tr:appFamily"        = "batch_service_dev"
+    "tr:appName"          = "wos"
+    "tr:environment-type" = "dev"
+    "tr:Role"             = "batch_service"
+    "tr:created-by"       = "6047692"
+  }
+}
