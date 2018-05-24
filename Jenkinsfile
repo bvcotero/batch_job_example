@@ -15,7 +15,6 @@ pipeline {
         sh 'sudo docker info'
         sh 'sh ./scripts/install_terraform.sh'
         sh 'terraform --version'
-        sh 'ssh-add -l'
       }
     }
     stage('test deployment') {
