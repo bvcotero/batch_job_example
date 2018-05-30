@@ -1,5 +1,9 @@
 #!/bin/bash
 
+export USER=jenkins
+
+echo $USER
+
 echo "DEPLOYING THE GLOBAL INFRASTRUCTURE"
 
 cd infrastructure/dev/global
