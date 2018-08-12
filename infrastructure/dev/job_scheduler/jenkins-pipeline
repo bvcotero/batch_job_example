@@ -1,0 +1,19 @@
+pipeline {
+  agent {
+    node {
+      label '\'tools\''
+    }
+    
+  }
+  stages {
+    stage('step1') {
+      steps {
+        echo 'starting step1'
+      }
+    }
+  }
+  environment {
+    key1 = 'hello'
+    key2 = 'world'
+  }
+}

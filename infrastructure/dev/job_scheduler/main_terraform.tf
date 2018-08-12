@@ -47,15 +47,34 @@ module "lambda_function" {
   handler       = "main.entrypoint"
   runtime       = "python2.7"
   tags          = "${module.tags.tags_merged}"
+}
 
-  source_arn    = "${data.aws_s3_bucket.snapshots.arn}"
-  source_id     = "${data.aws_s3_bucket.snapshots.id}"
+resource "aws_lambda_alias" "dev_alias" {
+    name             = "${var.application-name}_dev_alias"
+    description      = "An alias for the dev environment lambda"
+    function_name    = "${module.lambda_function.lambda_function_arn}"
+    function_version = "$LATEST"
+}
 
-  events        = "s3:ObjectCreated:*"
-  filter_prefix = "${var.snapshots_key}${var.job_input}/"
-  filter_suffix = "zip"
+resource "aws_lambda_permission" "allow_bucket" {
+    statement_id = "AllowExecutionFromS3Bucket"
+    action = "lambda:InvokeFunction"
+    function_name = "${aws_lambda_alias.dev_alias.arn}"
+    principal = "s3.amazonaws.com"
+    source_arn = "${data.aws_s3_bucket.snapshots.arn}"
+}
+
+resource "aws_s3_bucket_notification" "bucket_notification" {
+    bucket = "${data.aws_s3_bucket.snapshots.id}"
+    lambda_function {
+        lambda_function_arn = "${aws_lambda_alias.dev_alias.arn}"
+        events = ["s3:ObjectCreated:*"]
+        filter_prefix = "${var.snapshots_key}${var.job_input}/"
+        filter_suffix = "zip"
+    }
 }
 
 output "lambda_function_arn" { value = "${module.lambda_function.lambda_function_arn}" }
 output "execution_role_arn" { value = "${module.iam_lambda.execution_role_arn}" }
 output "execution_policy" { value = "${module.iam_lambda.exec_pol}" }
+output "lambda_dev_alias" { value = "${aws_lambda_alias.dev_alias.arn}" }
